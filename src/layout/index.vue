@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-container class="app-wrapper">
-      <el-aside width="200px" class="sidebar-container">
+      <el-aside width="210px" class="sidebar-container">
         <Menu></Menu>
       </el-aside>
       <el-container class="container">
-        <el-header>Header</el-header>
+        <el-header><Headers /></el-header>
         <el-main>
             <router-view></router-view>
         </el-main>
@@ -17,9 +17,13 @@
 <script setup>
 import { ref,reactive } from "vue";
 import Menu from './Menu/index.vue'
+import Headers from './headers/index.vue'
+
 </script>
 
 <style scoped lang="scss">
+// $sideBarWidth: 210px;
+// $hideSideBarWidth: 67px;
   .app-container {
   position: relative;
   width: 100%;
