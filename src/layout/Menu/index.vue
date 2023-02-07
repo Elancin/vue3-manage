@@ -7,16 +7,17 @@
         text-color="#fff"
         router
         unique-opened
+        
       >
         <el-sub-menu :index="item.id" v-for="item in MenuList" ::key="item.id">
             <template #title>
                 <el-icon><User /></el-icon>
-                <span>{{ item.authName }}</span>
+                <span>{{ $t(`menus.${item.path}`) }}</span>
             </template>
             
                 <el-menu-item  :index="'/'+it.path" v-for="it in item.children" :key="it.id" @click="savePath(it.path)">
                     <el-icon><ElementPlus /></el-icon>
-                    {{ it.authName }}
+                    {{ $t(`menus.${it.path}`) }}
                 </el-menu-item>
         </el-sub-menu>
       </el-menu>

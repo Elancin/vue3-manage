@@ -1,12 +1,20 @@
 <template>
-  <div class="hamburger-container">
-    <el-icon><Operation /></el-icon>
+  <div class="hamburger-container " @click="toggleClick" id="hamburger">
+    <el-icon ><Expand/></el-icon>
   </div>
 </template>
 
 <script setup >
-import { Operation } from "@element-plus/icons-vue";
+import { Expand } from "@element-plus/icons-vue";
 import { ref,reactive } from "vue";
+import { useStore } from "vuex";
+
+const store=useStore()
+const toggleClick=() => {
+  store.commit('app/changesideType')
+
+}
+
 </script>
 
 <style scoped lang="scss">

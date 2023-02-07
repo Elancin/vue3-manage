@@ -2,7 +2,7 @@
   <div class="login-container">
     <el-form :model="form" ref="formRef" class="login-form" :rules="rules">
       <div class="title-container">
-        <h3 class="title">用户登录</h3>
+        <h3 class="title">{{ $t('login.title') }}</h3>
       </div>
       <!-- 用户名 -->
     <el-form-item prop="username">
@@ -19,7 +19,7 @@
       <el-input v-model="form.password" :type="passwordType" />
       <el-icon style="color: #889aa4" @click="changeType"><View /></el-icon>
     </el-form-item>
-    <el-button type="primary" class="login-button" @click="handleLogin">登录</el-button>
+    <el-button type="primary" class="login-button" @click="handleLogin">{{$t('login.btnTitle')}}</el-button>
   </el-form>
   </div>
 </template>

@@ -7,7 +7,6 @@ const service = axios.create({
     timeout: 5000
 })
 service.interceptors.response.use((response) => {//响应器拦截
-    console.log(response);
     const { data, meta } = response.data
     if (meta.status === 200 || meta.status === 201) {
         return data

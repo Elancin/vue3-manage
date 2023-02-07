@@ -1,12 +1,25 @@
 <template>
   <div class="navbar">
     <Hamburger />
+    <Breadcrumb></Breadcrumb>
+    <div class="navbar-right">
+      <Driver class="navbar-item" />
+      <ScreenFull class="navbar-item"></ScreenFull>
+      <Lang class="navbar-item"></Lang>
+      <Avatar class="navbar-item" />
+    </div>
+    
   </div>
 </template>
 
 <script setup>
 import { ref,reactive } from "vue";
 import Hamburger from './components/hamburger.vue'
+import  Breadcrumb  from "./components/breadcrumb.vue"
+import Avatar from './components/avatar.vue'
+import Lang from './components/lang.vue'
+import ScreenFull from './components/screenFull.vue'
+import Driver from './components/driver/index.vue'
 </script>
 
 <style scoped lang="scss">
