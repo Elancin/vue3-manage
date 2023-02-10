@@ -11,7 +11,7 @@
     <el-form-item label="用户名" prop="username">
       <el-input v-model="form.username" />
     </el-form-item>
-    <el-form-item label="密码" prop="password">
+    <el-form-item label="密码" prop="password" v-if="dialogTitle==='添加用户'">
       <el-input v-model="form.password" type="password" />
     </el-form-item>
     <el-form-item label="邮箱" prop="email">
@@ -32,30 +32,22 @@
 </template>
 
 <script setup >
-import { defineEmits ,ref, defineProps} from "vue";
-import { addUser } from "@/api/users";
+import { defineEmits ,ref, defineProps,watch} from "vue";
+import { addUser ,editUser} from "@/api/users";
 import { ElMessage } from 'element-plus'
 import i18n from '@/i18n'
 
-defineProps({
+const props=defineProps({
     dialogTitle:{
         type:String,
         default:'',
         required:true
+    },
+    dialogTableValue:{
+      type:Object,
+      default:() => {}
     }
 })
-const emits=defineEmits(['update:modelValue'])
-const handleClose=() => { //取消
-    emits('update:modelValue',false)
-}
-const handleConfirm=async() => { //确认
-    await addUser(form.value)
-    ElMessage({
-    message: i18n.global.t('message.updeteSuccess'),
-    type: 'success',
-  })
-    handleClose()
-}
 const formRef=ref(null)
 const form=ref({
     username:'',
@@ -63,6 +55,36 @@ const form=ref({
     email:'',
     mobile:''
 })
+const emits=defineEmits(['update:modelValue','initUserList'])
+
+
+watch(()=>props.dialogTableValue,
+()=>{
+  form.value=props.dialogTableValue
+},
+{deep:true,immediate:true}
+)
+
+const handleClose=() => { //取消
+    emits('update:modelValue',false)
+}
+const handleConfirm=() => { //确认
+  formRef.value.validate(async(valid) => {
+    if(valid){
+     props.dialogTitle==='添加用户' ? await addUser(form.value) : await editUser(form.value)
+    ElMessage({
+    message: i18n.global.t('message.updeteSuccess'),
+    type: 'success',
+  })
+  emits('initUserList')
+  handleClose()
+    }else{
+      console.log('error');
+      return false
+    }
+  })
+    
+}
 const rules=ref({
     username:[
     { required: true, message: '输入用户名', trigger: 'blur' },
@@ -78,6 +100,7 @@ const rules=ref({
     { required: true, message: '输入手机号', trigger: 'blur' },
     ],
 })
+
 </script>
 
 <style scoped lang="scss">

@@ -8,7 +8,7 @@
       ></el-input>
     </el-col>
     <el-button type="primary" :icon="Search" @click="initGetUserList">{{ $t('table.search') }}</el-button>
-    <el-button type="primary"  @click="handleDialogValue">{{ $t('table.adduser') }}</el-button>
+    <el-button type="primary"  @click="handleDialogValue()">{{ $t('table.adduser') }}</el-button>
     </el-row>
 
     <el-table :data="tableData" stripe style="width: 100%">
@@ -26,8 +26,8 @@
       {{ $filters.filterTimes(row.create_time) }}
     </template>
 
-    <template v-else-if="item.prop==='action'" #default>
-      <el-button size="small">Default</el-button>
+    <template v-else-if="item.prop==='action'" #default="{row}">
+      <el-button size="small" @click="handleDialogValue(row)">修改</el-button>
       <el-button size="small">Default</el-button>
       <el-button size="small">Default</el-button>
     </template>
@@ -46,7 +46,13 @@
       @current-change="handleCurrentChange"
     />
   </el-card>
-  <Dialog v-model="dialogVisible" :dialogTitle="dialogTitle" v-if="dialogVisible" />
+  <Dialog 
+  v-model="dialogVisible" 
+  :dialogTitle="dialogTitle" 
+  v-if="dialogVisible" 
+  @initUserList="initGetUserList" 
+  :dialogTableValue="dialogTableValue"
+  />
 </template>
 
 <script setup>
@@ -57,6 +63,7 @@ import {options} from './options'
 import { ElMessage } from 'element-plus'
 import { useI18n } from "vue-i18n";
 import Dialog from './dialog.vue'
+import { isNull } from "@/utils/filters";
 
 const i18n=useI18n()
 const dialogVisible=ref(false)
@@ -68,6 +75,7 @@ const queryForm=ref({
 })
 const tableData=ref([])
 const total=ref(0)
+const dialogTableValue=ref({})
 
 const initGetUserList=async() => {
   const res=await getUser(queryForm.value)
@@ -94,9 +102,16 @@ const changeState=async (info) => { //修改用户状态
     type: 'success',
   })
 }
-const handleDialogValue=() => {
+const handleDialogValue=(row) => {
+  if(isNull(row)){
+    dialogTitle.value='添加用户'
+    dialogTableValue.value={}
+  }else{
+    dialogTitle.value='编辑用户'
+    dialogTableValue.value=JSON.parse(JSON.stringify(row))
+  }
   dialogVisible.value=true
-  dialogTitle.value='添加用户'
+  
 }
 </script>
 
