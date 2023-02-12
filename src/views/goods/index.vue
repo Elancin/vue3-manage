@@ -1,42 +1,55 @@
 <template>
-  <div ><div ref="chart" id="main" style="width: 600px;height:400px;"></div></div>
+  <v-chart class="chart" :option="option" />
+  <v-chart class="chart" :option="option1" />
+
 </template>
 
 <script setup>
-import { ref,onMounted } from "vue";
-import * as echarts from 'echarts';
-const chart=ref()
-onMounted(() => {
-  init()
+import VChart from "vue-echarts";
+import { use } from "echarts/core";
+import { ref } from "vue";
+import { GridComponent } from 'echarts/components';
+import { LineChart ,BarChart} from 'echarts/charts';
+import { UniversalTransition } from 'echarts/features';
+import { CanvasRenderer } from 'echarts/renderers';
+
+use([GridComponent, LineChart, CanvasRenderer, UniversalTransition,BarChart]);
+
+const option = ref({ //折线图
+  xAxis: {
+    type: 'category',
+    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  },
+  yAxis: {
+    type: 'value'
+  },
+  series: [
+    {
+      data: [150, 230, 224, 218, 135, 147, 260],
+      type: 'line'
+    }
+  ]
+});
+const option1=ref({ //柱状图
+  xAxis: {
+    type: 'category',
+    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  },
+  yAxis: {
+    type: 'value'
+  },
+  series: [
+    {
+      data: [120, 200, 150, 80, 70, 110, 130],
+      type: 'bar'
+    }
+  ]
 })
-function init() {
-      // 基于准备好的dom，初始化echarts实例
-      var myChart = echarts.init(chart.value);
-      // 指定图表的配置项和数据
-      var option = {
-        title: {
-          text: 'ECharts 入门示例'
-        },
-        tooltip: {},
-        legend: {
-          data: ['销量']
-        },
-        xAxis: {
-          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-        },
-        yAxis: {},
-        series: [
-          {
-            name: '销量',
-            type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
-          }
-        ]
-      };
-      
-      // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
-}
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.chart {
+  height: 400px;
+  width: 600px;
+}
+</style>
