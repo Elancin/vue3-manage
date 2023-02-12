@@ -69,7 +69,7 @@ module.exports = defineConfig({
       })
       .end()
   },
-  devServer: {//跨域
+  devServer: { //跨域
     https: false,
     proxy: {
       '/api': {

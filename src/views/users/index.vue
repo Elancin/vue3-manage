@@ -28,11 +28,11 @@
 
     <template v-else-if="item.prop==='action'" #default="{row}">
       <el-button size="small" @click="handleDialogValue(row)">修改</el-button>
-      <el-button size="small">Default</el-button>
-      <el-button size="small">Default</el-button>
+      <el-button size="small" @click="delUser(row)">删除</el-button>
     </template>
   </el-table-column>
   </el-table>
+  <!-- 分页器 -->
   <el-pagination
       v-model:current-page="queryForm.pagenum"
       :page-size="queryForm.pagesize"
@@ -60,7 +60,7 @@ import { ref,reactive } from "vue";
 import { Search } from '@element-plus/icons-vue'
 import {getUser,changeUserState} from '@/api/users'
 import {options} from './options'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { useI18n } from "vue-i18n";
 import Dialog from './dialog.vue'
 import { isNull } from "@/utils/filters";
@@ -80,17 +80,16 @@ const dialogTableValue=ref({})
 const initGetUserList=async() => {
   const res=await getUser(queryForm.value)
   tableData.value=res.users
-  // console.log(res);
   total.value=res.total
 }
 initGetUserList()
  
-const handleSizeChange=(pageSize) => {
+const handleSizeChange=(pageSize) => {//更改查询表单中的页面大小和当前页码
   queryForm.value.pagenum=1
   queryForm.value.pagesize=pageSize
   initGetUserList()
 }
-const handleCurrentChange=(pageNum) => {
+const handleCurrentChange=(pageNum) => { //更改查询表单中的当前页码
   queryForm.value.pagenum=pageNum
   initGetUserList()
 }
@@ -102,7 +101,7 @@ const changeState=async (info) => { //修改用户状态
     type: 'success',
   })
 }
-const handleDialogValue=(row) => {
+const handleDialogValue=(row) => { //添加、编辑用户
   if(isNull(row)){
     dialogTitle.value='添加用户'
     dialogTableValue.value={}
@@ -112,6 +111,30 @@ const handleDialogValue=(row) => {
   }
   dialogVisible.value=true
   
+}
+
+const delUser=(row) => {
+  ElMessageBox.confirm(
+    'proxy will permanently delete the file. Continue?',
+    'Warning',
+    {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      ElMessage({
+        type: 'success',
+        message: 'Delete completed',
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Delete canceled',
+      })
+    })
 }
 </script>
 

@@ -27,7 +27,6 @@
 <script setup>
 import{ref} from 'vue'
 import{Lock,User,View} from '@element-plus/icons-vue'
-// import { login } from "@/api/login";
 import { useStore } from "vuex";
 
 const store=useStore()
